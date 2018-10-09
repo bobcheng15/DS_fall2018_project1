@@ -3,18 +3,25 @@
 #include <string>
 #include <queue>
 
-void find_peak(std::ofstream & output_file, const int & row , const int & column, int * matrix, const int & cur_row, int & rotating_row){
+void find_peak(std::queue<int> & result, const int & row , const int & column, int * matrix, const int & cur_row, int & rotating_row, int & count){
+    int cur_matrix_row_idx = cur_row % 3;
     for (int i = 0; i < column; i ++){
         bool flag = true;
-        if (cur_row > 0 && matrix[((rotating_row + 2) % 3) * column + i] > matrix[rotating_row * column + i])
+        if (cur_row > 0 && matrix[((cur_matrix_row_idx % 3 + 2) % 3) * column + i] > matrix[cur_matrix_row_idx * column + i])
             flag = false;
-        if (cur_row < row - 1 && matrix[((rotating_row + 1) % 3) * column + i] > matrix[rotating_row * column + i])
+        if (cur_row < row - 1 && matrix[((cur_matrix_row_idx + 1) % 3) * column + i] > matrix[cur_matrix_row_idx * column + i])
             flag = false;
-        if (i > 0 && matrix[rotating_row * column + i - 1] > matrix[rotating_row * column + i])
+        if (i > 0 && matrix[cur_matrix_row_idx * column + i - 1] > matrix[cur_matrix_row_idx * column + i])
             flag = false;
-        if (i < column - 1 && matrix[rotating_row * column + i + 1] > matrix[rotating_row * column + i])
+        if (i < column - 1 && matrix[cur_matrix_row_idx * column + i + 1] > matrix[cur_matrix_row_idx * column + i])
             flag = false;
+        if (flag){
+            result.push(cur_row + 1);
+            result.push(i + 1);
+            count = count + 1;
+        }
     }
+    rotating_row = (rotating_row + 1) % 3;
 }
 
 void read_matrix(std::ifstream & input_file, const int & column, int * matrix, const int & rotating_row){
@@ -26,6 +33,12 @@ void read_matrix(std::ifstream & input_file, const int & column, int * matrix, c
             }
         }
         first = false;
+        for (int i = 0; i < 2; i ++){
+            for (int j = 0; j < column; j ++){
+                std::cout << matrix[i * column + j] << " ";
+            }
+            std::cout << '\n';
+        }
     }
     else{
         for (int i = 0; i < column; i ++){
@@ -35,23 +48,27 @@ void read_matrix(std::ifstream & input_file, const int & column, int * matrix, c
 }
 int main(void){
     int row, column;
-    int rotating_row = 2;
+    int rotating_row = 1;
+    int count = 0;
     std::ifstream input_file;
     std::ofstream output_file;
+    std::queue<int> result;
     input_file.open("matrix.data");
     output_file.open("final.peak");
     input_file >> row;
     input_file >> column;
     std::cout << row << " " << column << '\n';
     int matrix [3][column];
-    for (int num = 0; num < row - 2; num ++){
+    for (int cur_row = 0; cur_row < row; cur_row ++){
         read_matrix(input_file, column, &matrix[0][0], rotating_row);
-        for (int i = 0; i < 3; i ++){
-            for (int j = 0; j < column; j ++){
-                std::cout << matrix[i][j] << " ";
-            }
-            std::cout << '\n';
-        }
+        find_peak(result, row, column, &matrix[0][0], cur_row, rotating_row, count);
+    }
+    output_file << count << '\n';
+    for (int i = 0; i < count; i ++){
+        output_file << result.front() << " ";
+        result.pop();
+        output_file << result.front() << '\n';
+        result.pop();
     }
     return 0;
 }
