@@ -28,7 +28,6 @@ int main(void){
     input_file.open("matrix.data");
     input_file >> row;
     input_file >> column;
-    std::cout << row << " " << column << '\n';
     int matrix [3][column];
     for (int num = 0; num < row - 2; num ++){
         read_matrix(input_file, column, &matrix[0][0]);
