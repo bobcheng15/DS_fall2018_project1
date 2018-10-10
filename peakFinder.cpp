@@ -46,15 +46,15 @@ void read_matrix(std::ifstream & input_file, const int & column, int * matrix, c
         }
     }
 }
-int main(void){
+int main(int argc, char** argv) {
     int row, column;
     int rotating_row = 1;
     int count = 0;
     std::ifstream input_file;
     std::ofstream output_file;
     std::queue<int> result;
-    input_file.open("matrix.data");
-    output_file.open("final.peak");
+    input_file.open("./"+ std::string(argv[1]) + "/matrix.data");
+    output_file.open("./"+ std::string(argv[1]) + "/final.peak");
     input_file >> row;
     input_file >> column;
     std::cout << row << " " << column << '\n';
