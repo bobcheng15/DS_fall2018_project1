@@ -33,12 +33,6 @@ void read_matrix(std::ifstream & input_file, const int & column, int * matrix, c
             }
         }
         first = false;
-        for (int i = 0; i < 2; i ++){
-            for (int j = 0; j < column; j ++){
-                std::cout << matrix[i * column + j] << " ";
-            }
-            std::cout << '\n';
-        }
     }
     else{
         for (int i = 0; i < column; i ++){
@@ -57,7 +51,6 @@ int main(int argc, char** argv) {
     output_file.open("./"+ std::string(argv[1]) + "/final.peak");
     input_file >> row;
     input_file >> column;
-    std::cout << row << " " << column << '\n';
     int matrix [3][column];
     for (int cur_row = 0; cur_row < row; cur_row ++){
         read_matrix(input_file, column, &matrix[0][0], rotating_row);
