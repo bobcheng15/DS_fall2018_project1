@@ -7,13 +7,13 @@ void find_peak(std::queue<int> & result, const int & row , const int & column, i
     int cur_matrix_row_idx = cur_row % 3;
     for (int i = 0; i < column; i ++){
         bool flag = true;
-        if (cur_row > 0 && matrix[((cur_matrix_row_idx % 3 + 2) % 3) * column + i] > matrix[cur_matrix_row_idx * column + i])
+        if (cur_row > 0 && matrix[((cur_matrix_row_idx + 2) % 3) * column + i] > matrix[cur_matrix_row_idx * column + i])
             flag = false;
-        if (cur_row < row - 1 && matrix[((cur_matrix_row_idx + 1) % 3) * column + i] > matrix[cur_matrix_row_idx * column + i])
+        else if (cur_row < row - 1 && matrix[((cur_matrix_row_idx + 1) % 3) * column + i] > matrix[cur_matrix_row_idx * column + i])
             flag = false;
-        if (i > 0 && matrix[cur_matrix_row_idx * column + i - 1] > matrix[cur_matrix_row_idx * column + i])
+        else if (i > 0 && matrix[cur_matrix_row_idx * column + i - 1] > matrix[cur_matrix_row_idx * column + i])
             flag = false;
-        if (i < column - 1 && matrix[cur_matrix_row_idx * column + i + 1] > matrix[cur_matrix_row_idx * column + i])
+        else if (i < column - 1 && matrix[cur_matrix_row_idx * column + i + 1] > matrix[cur_matrix_row_idx * column + i])
             flag = false;
         if (flag){
             result.push(cur_row + 1);
